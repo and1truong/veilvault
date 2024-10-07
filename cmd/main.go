@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/andy1truong/veilvault/internal/veilvault"
 	"github.com/spf13/cobra"
@@ -23,8 +24,14 @@ func main() {
 			dirPath := args[0]
 			imagePath := args[1]
 			password, _ := cmd.Flags().GetString("password")
+			exclude, _ := cmd.Flags().GetString("exclude")
+			excludes := []string{}
 
-			err := veilvault.Encode(dirPath, imagePath, password)
+			if exclude != "" {
+				excludes = strings.Split(strings.TrimSpace(exclude), ",")
+			}
+
+			err := veilvault.Encode(dirPath, imagePath, password, excludes)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "Error encoding directory: %v\n", err)
 			} else {
@@ -53,6 +60,7 @@ func main() {
 
 	// Add password flag for both commands
 	encodeCmd.Flags().StringP("password", "p", "", "Password for encoding")
+	encodeCmd.Flags().StringP("exclude", "e", "", "Comma-separated list of files or directories to exclude")
 	decodeCmd.Flags().StringP("password", "p", "", "Password for decoding")
 
 	rootCmd.AddCommand(encodeCmd)
