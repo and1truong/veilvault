@@ -38,7 +38,7 @@ func Encode(dirPath, imagePath string, password string, excludes []string) error
 
 		// Check if the file or directory is in the excludes list
 		if len(excludes) > 0 && shouldExclude(relPath, excludes) {
-			fmt.Println(" › excluded", relPath, excludes, len(excludes))
+			fmt.Println(" › excluded", relPath)
 			return nil // Skip this file/directory by returning nil
 		} else {
 			fmt.Println(" › included", relPath)
